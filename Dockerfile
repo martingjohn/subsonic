@@ -15,9 +15,15 @@ ENV SUBSONIC_DEFAULT_PLAYLIST_FOLDER /opt/playlists
 
 WORKDIR $INSTALL_DIR
 
-RUN wget -O- --quiet "https://sourceforge.net/projects/subsonic/files/subsonic/$VERSION/subsonic-$VERSION-standalone.tar.gz/download"| tar zxv -C $INSTALL_DIR
+RUN apt-get update \
+ && apt-get install -y \
+            ffmpeg \
+ && rm -rf /var/lib/apt/lists/* \
+ && wget -O- --quiet "https://sourceforge.net/projects/subsonic/files/subsonic/$VERSION/subsonic-$VERSION-standalone.tar.gz/download"| tar zxv -C $INSTALL_DIR
 
-CMD java -Xmx${SUBSONIC_MAX_MEMORY}m \
+CMD mkdir -p ${SUBSONIC_HOME}/transcode && \
+    ln -fs /usr/bin/ffmpeg ${SUBSONIC_HOME}/transcode/ffmpeg && \
+    java -Xmx${SUBSONIC_MAX_MEMORY}m \
          -Dsubsonic.home=${SUBSONIC_HOME} \
          -Dsubsonic.host=${SUBSONIC_HOST} \
          -Dsubsonic.port=${SUBSONIC_PORT} \
