@@ -1,6 +1,6 @@
 FROM openjdk:8
 
-ENV VERSION 6.1.3
+ENV VERSION 6.1.4
 ENV INSTALL_DIR /opt/subsonic
 
 ENV SUBSONIC_HOME /home/subsonic
